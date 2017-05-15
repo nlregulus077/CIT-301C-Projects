@@ -1,6 +1,8 @@
 <nav class = "panel panel-default">
   <div class = "panel-heading pad-all">
   <div class = "container-fluid pad-all">
+    <h2>{{ contact.name }}</h2>
+    <img [src]="contact.imageURL" alt="{{ contact.name }}" class="img-responsive" style="max-height: 200px" >
     <div class = "pad-left-right">
       <a href = "#" >
         <div class="pull-right">
@@ -14,8 +16,8 @@
 
 <nav class="panel panel-body">
   <div class="container-fluid">
-      <h4>Email: </h4>
-      <h4>Phone: </h4>
+      <h4>Email: {{ contact.email }}</h4>
+      <h4>Phone: {{ contact.phone }} </h4>
   </div>
 </nav>
 </nav>
