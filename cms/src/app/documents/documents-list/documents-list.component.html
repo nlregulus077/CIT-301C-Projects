@@ -1,12 +1,12 @@
-<div class="panel panel-default co">
-  <div class="panel-heading pad-left-right">
+<div class="panel panel-default" style="width: 38rem">
+  <div class="panel-heading">
     <div class="row pad-left-right">
-      <span class="pull-left title pad-left-right">Documents</span>
+      <span class="pull-left title">Documents</span>
       <a class="btn btn-success pull-right">Add Document</a>
     </div>
   </div>
-  <div class="panel-body container-fluid">
-    <div class="center-panel pad-left-right container-fluid">
+  <div class="panel-body">
+    <div class="center-panel">
       <cms-documents-item
       *ngFor="let documentElement of documents"
       [document]="documentElement"
