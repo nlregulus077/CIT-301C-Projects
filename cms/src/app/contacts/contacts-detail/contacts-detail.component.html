@@ -6,8 +6,8 @@
     <div class = "pad-left-right">
       <a href = "#" >
         <div class="pull-right">
-          <button class = "btn btn-primary">Edit</button>
-            <button class = "btn btn-danger">Delete</button>
+          <a routerLink='edit' class = "btn btn-primary">Edit</a>
+            <a (click)="onDeleteContact()" class = "btn btn-danger">Delete</a>
         </div>
       </a>
     </div>

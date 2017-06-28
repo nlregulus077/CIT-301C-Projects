@@ -1,5 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Document} from '../document.model';
+
+import {ActivatedRoute, Router} from '@angular/router';
+
+import {Document} from "../document.model";
 
 @Component({
   selector: 'cms-documents-item',
@@ -10,7 +13,9 @@ export class DocumentsItemComponent implements OnInit {
 
   @Input() document: Document;
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit() {
   }

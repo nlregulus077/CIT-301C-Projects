@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { Document } from '../document.model';
 import { DocumentsService } from '../documents.service';
 
+
 @Component({
   selector: 'cms-documents-list',
   templateUrl: './documents-list.component.html',
@@ -16,11 +17,9 @@ export class DocumentsListComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.documentsService.documentChangedEvent.subscribe((documents: Document[]) =>
+    this.documents = documents);
   }
 
-  onSelectedDocument(document: Document){
-    this.documentsService.documentSelectedEvent.emit(document);
-  }
 
 }
