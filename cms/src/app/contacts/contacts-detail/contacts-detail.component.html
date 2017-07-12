@@ -19,5 +19,9 @@
       <h4>Email: {{ contact.email }}</h4>
       <h4>Phone: {{ contact.phone }} </h4>
   </div>
+
+  <div class ="row" *ngIf="contactGroup && contactGroup.length > 0">
+    <cms-contact-item *ngFor="let contact of contactGroup" [contact]="contact"></cms-contact-item>
+  </div>
 </nav>
 </nav>

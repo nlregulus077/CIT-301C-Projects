@@ -12,6 +12,7 @@ export class ContactsDetailComponent implements OnInit {
 
   contact: Contact;
   id: string;
+  contactGroup: Contact[] = [];
 
   constructor(private contactService: ContactService,
               private router: Router,
@@ -22,6 +23,7 @@ export class ContactsDetailComponent implements OnInit {
       (params: Params) => {
         this.id = params['id'];
         this.contact = this.contactService.getContact(this.id);
+        this.contactGroup = this.contact.group;
       }
     );
   }
