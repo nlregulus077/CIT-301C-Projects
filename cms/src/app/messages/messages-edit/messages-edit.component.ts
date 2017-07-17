@@ -15,7 +15,7 @@ export class MessagesEditComponent implements OnInit {
   @ViewChild('msgText') msgTextInputRef: ElementRef;
 
   currentSender: string = 'Jeanina Lao';
-  senderID: Contact = null;
+
   senderName: Contact = null;
 
 
@@ -23,13 +23,13 @@ export class MessagesEditComponent implements OnInit {
   constructor(private messageService: MessageService, private contactService: ContactService) { }
 
   ngOnInit() {
-    this.senderID = this.contactService.getContact('7');
+
   }
 
   onSendMessage() {
     const subjectName = this.subjectInputRef.nativeElement.value;
     const messageText = this.msgTextInputRef.nativeElement.value;
-    const sendID = this.senderID.id;
+    const sendID = this.messageService.senderID.id;
     const newMessage = new Message(null, subjectName, messageText, sendID);
     this.messageService.addMessage(newMessage);
     this.onClear();

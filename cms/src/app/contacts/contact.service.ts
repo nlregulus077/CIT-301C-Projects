@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import { Contact } from "./contact.model";
-import { MOCKCONTACTS } from './MOCKCONTACTS';
 import {Subject} from "rxjs/Subject";
+import {Http, Response} from '@angular/http';
 
 @Injectable()
 export class ContactService {
@@ -10,12 +10,11 @@ export class ContactService {
   contactChangedEvent = new EventEmitter<Contact[]>();
   contactListChangedEvent = new Subject<Contact[]>();
 
-  private contacts: Contact[] = [];
+  contacts: Contact[] = [];
   public maxContactId: number = 0;
 
-  constructor() {
-    this.contacts = MOCKCONTACTS;
-    this.maxContactId = this.getMaxId()
+  constructor(private http: Http) {
+    this.initContacts();
   }
 
   getContacts(): Contact[] {
@@ -50,8 +49,7 @@ export class ContactService {
     this.maxContactId++;
     newContact.id = this.maxContactId.toString();
     this.contacts.push(newContact);
-    let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone);
+    this.storeContacts();
 
   }
 
@@ -72,8 +70,7 @@ export class ContactService {
 
     newContact.id = originalContact.id;
     this.contacts[pos] = newContact;
-    let contactsListClone = this.contacts.slice();
-    this.contactListChangedEvent.next(contactsListClone);
+    this.storeContacts();
   }
 
   deleteContact (contact: Contact) {
@@ -87,6 +84,34 @@ export class ContactService {
     }
 
     this.contacts.splice(pos, 1);
-    this.contactChangedEvent.emit(this.contacts.slice());
+    this.storeContacts();
   }
+
+  initContacts() {
+    this.http.get('https://cms-project-777d2.firebaseio.com/contacts.json')
+      .map(
+        (response: Response) => {
+          const contacts: Contact[] = response.json();
+          return contacts;
+        }
+      )
+      .subscribe(
+        (contactsReturned: Contact[]) => {
+          this.contacts = contactsReturned;
+          this.maxContactId = this.getMaxId();
+          this.contactListChangedEvent.next(this.contacts.slice());
+        }
+      );
+  }
+
+  storeContacts() {
+    JSON.stringify(this.contacts);
+    this.http.put('https://cms-project-777d2.firebaseio.com/contacts.json', this.getContacts())
+      .subscribe(
+        (response: Response) => {
+          this.contactListChangedEvent.next(this.contacts.slice());
+        }
+      );
+  }
+
 }

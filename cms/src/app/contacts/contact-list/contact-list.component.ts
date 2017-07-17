@@ -12,6 +12,7 @@ export class ContactListComponent implements OnInit {
 
   contacts: Contact[] = [];
   subscription: Subscription;
+  term: string;
 
   constructor(private contactService: ContactService) {
     this.contacts = contactService.getContacts();
@@ -24,6 +25,10 @@ export class ContactListComponent implements OnInit {
     this.subscription = this.contactService.contactListChangedEvent
       .subscribe((contactsList: Contact[]) =>
         this.contacts = contactsList);
+  }
+
+  onKeyPress(value: string) {
+    this.term = value;
   }
 
 

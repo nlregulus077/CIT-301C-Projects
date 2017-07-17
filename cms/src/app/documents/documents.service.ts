@@ -1,7 +1,8 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import { Document } from './document.model';
-import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import {Subject} from "rxjs/Subject";
+import {Http, Response} from '@angular/http';
+import "rxjs/Rx";
 
 @Injectable()
 export class DocumentsService {
@@ -10,12 +11,11 @@ export class DocumentsService {
   documentChangedEvent = new EventEmitter<Document[]>();
   documentListChangedEvent = new Subject<Document[]>();
 
-  private documents: Document[] = [];
+  documents: Document[] = [];
   public maxDocumentId: number = 0;
 
-  constructor() {
-    this.documents = MOCKDOCUMENTS;
-    this.maxDocumentId = this.getMaxId();
+  constructor(private http: Http) {
+    this.initDocuments();
   }
 
   getDocuments(): Document[] {
@@ -50,12 +50,12 @@ export class DocumentsService {
     newDocument.id = this.maxDocumentId.toString();
     this.documents.push(newDocument);
     let documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments();
 
   }
 
   updateDocument(originalDocument: Document,
-                  newDocument: Document) {
+                 newDocument: Document) {
     if (originalDocument === null) {
       return;
     }
@@ -70,8 +70,7 @@ export class DocumentsService {
 
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
-    let documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments()
   }
 
 
@@ -86,7 +85,34 @@ export class DocumentsService {
     }
 
     this.documents.splice(pos, 1);
-    this.documentChangedEvent.emit(this.documents.slice());
+    this.storeDocuments();
+  }
+
+  initDocuments() {
+    this.http.get('https://cms-project-777d2.firebaseio.com/documents.json')
+      .map(
+      (response: Response) => {
+        const documents: Document[] = response.json();
+        return documents;
+      }
+    )
+      .subscribe(
+        (documentsReturned: Document[]) => {
+          this.documents = documentsReturned;
+          this.maxDocumentId = this.getMaxId();
+          this.documentListChangedEvent.next(this.documents.slice());
+        }
+      );
+  }
+
+  storeDocuments() {
+    JSON.stringify(this.documents);
+    this.http.put('https://cms-project-777d2.firebaseio.com/documents.json', this.getDocuments())
+      .subscribe(
+        (response: Response) => {
+          this.documentListChangedEvent.next(this.documents.slice());
+        }
+      );
   }
 
 }

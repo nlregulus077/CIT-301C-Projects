@@ -29,7 +29,7 @@
             class="form-control required"
             size="120"
             max="255">
-          <div class="col-sm-12 alert alert-danger padding" *ngIf="!email.valid">
+          <div class="col-sm-12 alert alert-danger padding" *ngIf="!email.valid || email.dirty || email.touched">
             Enter a valid email address.
           </div>
         </div>
@@ -46,7 +46,7 @@
             class="form-control invalid"
             size="150"
             max="255">
-          <div class="col-sm-12 alert alert-danger"*ngIf="!phone.valid">
+          <div class="col-sm-12 alert alert-danger" *ngIf="!phone.valid || phone.dirty || phone.touched">
             Enter a valid phone number.
           </div>
         </div>
